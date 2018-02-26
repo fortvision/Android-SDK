@@ -1,0 +1,13 @@
+-keep public interface com.fortvision.minisites.network.FVServerAPI {*; }
+-keep class com.squareup.okhttp.** {*;}
+-keep interface com.squareup.okhttp.** {*;}
+-keep class retrofit.** {*;}
+-keepclasseswithmembers class * {
+	@retrofit.http.* <methods>;
+}
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.AppGlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}

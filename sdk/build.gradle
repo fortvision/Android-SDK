@@ -1,0 +1,73 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'com.novoda.bintray-release'
+
+def libraryGroupId = 'com.fortvision.minisites'
+def libraryBaseName = 'minisites-sdk'
+def libraryVersion = "1.0.0"
+
+// ======== MAVEN DEPLOY to local cache or nexus repo (to make accessible to local projects) (command: ./gradlew clean aRel uploadArchives) ========
+uploadArchives {
+    repositories {
+        // deploy to local
+        mavenDeployer {
+            repository (url: "file://${System.env.HOME}/.m2/repository/")
+            pom.groupId = libraryGroupId
+            pom.artifactId = libraryBaseName
+            pom.version = libraryVersion //Normally I would append "-SNAPSHOT" but newer gradle/maven can't always find them
+            pom.packaging = 'aar'
+            uniqueVersion = false // don't put in a timestamp on the filename (other project will not be able to depend on it)
+        }
+    }
+}
+
+// ======= BINTRAY DEPLOY (command: $ ./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false) ====
+publish {
+    bintrayUser = 'fortvision'
+    bintrayKey = '071dc481bbb5d81e197b3b61fb75b2e4687662e4'
+    groupId = libraryGroupId
+    artifactId = libraryBaseName
+    uploadName = 'minisites-sdk'
+    publishVersion = libraryVersion
+    autoPublish = false
+    dryRun = false
+    repository = 'https://bitbucket.org/FORTVISION/android-floating-button.git'
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
+
+    lintOptions {
+        abortOnError false
+    }
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0.0"
+        consumerProguardFiles 'proguard.txt'
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.devbrackets.android:exomedia:3.1.0'
+    compile 'com.google.android.gms:play-services-ads:11.8.0'
+
+    compile 'com.github.bumptech.glide:glide:4.0.0'
+    compile 'com.android.support:support-v4:25.4.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
+}

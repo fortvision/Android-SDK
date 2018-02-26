@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="FVMinisitesDialogTheme" parent="Theme.AppCompat.Dialog">
+        <!--<item name="android:windowBackground">@drawable/fv_minisites_round_rect</item>-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/FvDialogAnimation.Window</item>
+    </style>
+
+    <style name="FvDialogAnimation.Window" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/fv_minisites_scale_in</item>
+        <item name="android:windowExitAnimation">@anim/fv_minisites_scale_out</item>
+    </style>
+</resources>

@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fortvision.minisites">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+
+        android:supportsRtl="true">
+
+        <receiver android:name="com.fortvision.minisites.UserLocationUpdater" />
+    </application>
+
+</manifest>

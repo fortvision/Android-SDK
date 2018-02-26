@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layoutDirection="ltr">
+
+    <GridLayout
+        android:id="@+id/fv_minisites_poup_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:columnCount="2"
+        android:rowCount="2">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fv_minisites_round_rect">
+
+            <WebView
+                android:id="@+id/fv_minisites_webview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ProgressBar
+                android:id="@+id/fv_minisites_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/fv_minisites_close_popup"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginStart="4dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/fv_minisites_close_popup"
+            tools:ignore="ContentDescription"/>
+
+        <include
+            android:id="@+id/fv_minisites_powered_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            layout="@layout/fv_minisites_powered_by_text"/>
+
+    </GridLayout>
+
+</FrameLayout>

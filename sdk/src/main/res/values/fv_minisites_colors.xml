@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="fv_minisites_popup_bg">#85000000</color>
+    <color name="fv_minisites_video_frame">#ffcecece</color>
+</resources>

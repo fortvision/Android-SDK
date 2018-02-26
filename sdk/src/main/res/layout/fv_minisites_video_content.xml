@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/fv_minisites_video_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/fv_minisites_top_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <include
+            android:id="@+id/fv_minisites_powered_by_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            layout="@layout/fv_minisites_powered_by_text"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/fv_minisites_video_padding">
+
+            <WebView
+                android:id="@+id/fv_minisites_webview_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <ProgressBar
+                android:id="@+id/fv_minisites_progress_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/fv_minisites_video_frame"
+        android:padding="@dimen/fv_minisites_video_padding">
+
+        <com.devbrackets.android.exomedia.ui.widget.EMVideoView
+            android:background="@android:color/black"
+            android:id="@+id/fv_minisites_video_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:useDefaultControls="false"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/fv_minisites_bottom_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/fv_minisites_video_padding">
+
+            <WebView
+                android:id="@+id/fv_minisites_webview_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <ProgressBar
+                android:id="@+id/fv_minisites_progress_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+
+        <include
+            android:id="@+id/fv_minisites_powered_by_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            layout="@layout/fv_minisites_powered_by_text"/>
+
+    </LinearLayout>
+</LinearLayout>
