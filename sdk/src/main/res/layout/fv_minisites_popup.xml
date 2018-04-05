@@ -10,7 +10,6 @@
         android:id="@+id/fv_minisites_poup_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
         android:columnCount="2"
         android:rowCount="2">
 

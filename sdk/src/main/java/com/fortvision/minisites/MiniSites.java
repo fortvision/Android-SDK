@@ -43,10 +43,9 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
     private FVServerAPI serverAPI;
 
     private String cachedUserId;
+    private String cachedUserAgent;
 
     private AsyncTask<FVButtonContext, Void, Void> getUserIdTask;
-
-    private String cachedUserAgent;
 
     private Call<FVButton> lastButtonCall;
 
@@ -54,7 +53,7 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
 
     private Set<FVButton> clickedButtons = new HashSet<>();
 
-    private static MiniSites INSTANCE;
+    public static MiniSites INSTANCE;
 
     private LocationManager lm;
 
@@ -68,6 +67,14 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
         if (INSTANCE == null)
             INSTANCE = new MiniSites();
         return INSTANCE;
+    }
+
+    public String getCachedUserId() {
+        return cachedUserId;
+    }
+
+    public String getCachedUserAgent() {
+        return cachedUserAgent;
     }
 
     public static void setAllowedLocationGathering(@NonNull Context context, boolean allowed) {
@@ -149,7 +156,6 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
                 charging, batteryLevel);
         call.enqueue(new BaseCallback<ResponseBody>());
     }
-
 
     private void retrieveAndShowButton(@NonNull final FVButtonContext context) {
 

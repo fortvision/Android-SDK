@@ -239,12 +239,12 @@ public class FVButtonVideoView extends FVButtonView implements OnPreparedListene
         View progressBar;
         View poweredByView;
         final View container;
-        if (!((VideoButton) button).isBigVideoAlignmentBottom()) {
+        /*if (!((VideoButton) button).isBigVideoAlignmentBottom()) {
             webView = (WebView) findViewById(R.id.fv_minisites_webview_bottom);
             progressBar = findViewById(R.id.fv_minisites_progress_bottom);
             poweredByView = findViewById(R.id.fv_minisites_powered_by_bottom);
             container = findViewById(R.id.fv_minisites_bottom_content);
-        } else {
+        } else {*/
             webView = (WebView) findViewById(R.id.fv_minisites_webview_top);
             progressBar = findViewById(R.id.fv_minisites_progress_top);
             poweredByView = findViewById(R.id.fv_minisites_powered_by_top);
@@ -261,7 +261,7 @@ public class FVButtonVideoView extends FVButtonView implements OnPreparedListene
                 }
             };
             container.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-        }
+        //}
         if (showBanner) {
             controls.setVisibility(VISIBLE);
             showControls();
@@ -271,7 +271,7 @@ public class FVButtonVideoView extends FVButtonView implements OnPreparedListene
             container.setVisibility(View.VISIBLE);
             Utils.configureWebView(webView, progressBar);
             ViewGroup.LayoutParams lp = webView.getLayoutParams();
-            lp.height = Utils.dpToPx(getContext(), button.getPopup().getHeight());
+            //lp.height = Utils.dpToPx(getContext(), button.getPopup().getHeight());
             webView.setLayoutParams(lp);
             webView.setOnTouchListener(webViewInteractedListener);
             Utils.configuredPoweredByView(poweredByView);
@@ -283,7 +283,7 @@ public class FVButtonVideoView extends FVButtonView implements OnPreparedListene
             controls.setSoundOn(false);
             soundOn = false;
             controls.setVisibility(INVISIBLE);
-            if (container.getVisibility() == VISIBLE && ((VideoButton) button).isBigVideoAlignmentBottom())
+            //if (container.getVisibility() == VISIBLE && ((VideoButton) button).isBigVideoAlignmentBottom())
                 setY(getY() + container.getHeight());
             container.setVisibility(View.GONE);
         }

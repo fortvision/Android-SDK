@@ -28,7 +28,9 @@ import android.widget.ImageView;
 
 import com.fortvision.minisites.model.Anchor;
 import com.fortvision.minisites.model.FVButton;
-import com.fortvision.minisites.model.VideoButton;
+import com.fortvision.minisites.network.BaseCallback;
+import com.fortvision.minisites.network.FVServerAPI;
+import com.fortvision.minisites.network.FVServerApiFactory;
 import com.fortvision.minisites.utils.Assets;
 import com.fortvision.minisites.utils.BaseAnimatorListener;
 import com.fortvision.minisites.utils.Utils;
@@ -36,6 +38,9 @@ import com.fortvision.minisites.view.FVButtonActionListener;
 import com.fortvision.minisites.view.FVButtonVideoView;
 import com.fortvision.minisites.view.FVButtonView;
 import com.fortvision.minisites.view.VideoEventsListener;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 /**
  * A controller for the {@link com.fortvision.minisites.view.FVButtonView}
@@ -75,9 +80,7 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
     private ImageView trashView;
 
     private static final int PARENT_LAID_OUT = 1;
-
     private static final int BUTTON_LAID_OUT = 1 << 1;
-
     private static final int BUTTON_FINISHED_LOAD = 1 << 2;
 
     private int buttonStatus;
@@ -86,7 +89,12 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
 
     private VideoEventsListener videoEventsListener;
 
+    private long startLoadedTime;
+
+    private FVServerAPI serverAPI;
+
     private ButtonViewController() {
+        serverAPI = FVServerApiFactory.create();
     }
 
     static ButtonViewController get() {
@@ -217,26 +225,47 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
         Activity activity = fvContext.getActivity();
         if (activity == null)
             return;
-
+        startLoadedTime = System.currentTimeMillis();
         animateButtonOut(null);
 
-        //Dialog dialog = createPopup(activity, button.getPopup());
-        //dialog.show();
-        PopupDialogFragment dialogFragment = new PopupDialogFragment(activity, button.getPopup());
+        PopupDialogFragment dialogFragment = new PopupDialogFragment(activity, button.getPopup(), INSTANCE);
         dialogFragment.show(activity.getFragmentManager(), "popup");
 
         if (listener != null)
             listener.onButtonClick(button);
     }
 
-    private void onPopupDismissed() {
+    public void onPopupDismissed() {
         if (buttonView != null) {
             animateButtonToAnchor(buttonView.getCurrentAnchor());
             buttonView.startDimTimer();
         }
+        onClosePopup();
     }
 
-    private void showVideoFull(final FVButtonVideoView buttonView, final VideoButton button) {
+    public long getSecSinceStart() {
+        return System.currentTimeMillis() - startLoadedTime;
+    }
+
+    public void onLoadPopup() {
+        if (buttonView != null) {
+            FVButton button = buttonView.getButton();
+            Call<ResponseBody> call = serverAPI.reportLoadPopup(button.getCampaignId(), String.valueOf(button.getDesignId()), MiniSites.INSTANCE.getCachedUserId(),
+                    Utils.getDeviceIpAsStr(), MiniSites.INSTANCE.getCachedUserAgent(), getSecSinceStart());
+            call.enqueue(new BaseCallback<ResponseBody>());
+        }
+    }
+
+    public void onClosePopup() {
+        if (buttonView != null) {
+            FVButton button = buttonView.getButton();
+            Call<ResponseBody> call = serverAPI.reportClosePopup(button.getCampaignId(), String.valueOf(button.getDesignId()), MiniSites.INSTANCE.getCachedUserId(),
+                    Utils.getDeviceIpAsStr(), MiniSites.INSTANCE.getCachedUserAgent(), getSecSinceStart());
+            call.enqueue(new BaseCallback<ResponseBody>());
+        }
+    }
+
+   /* private void showVideoFull(final FVButtonVideoView buttonView, final VideoButton button) {
         Context context = buttonView.getContext();
         buttonView.cancelDim();
         handler.removeCallbacks(dismissVideoCompleted);
@@ -249,8 +278,8 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
         final float startY = buttonView.getY();
         int videoPadding = context.getResources().getDimensionPixelSize(R.dimen.fv_minisites_video_padding);
         final int fullVideoHeight = (int) (button.getBigAspectRatio() * (buttonContainer.getWidth() - videoPadding * 2)) + videoPadding * 2;
-        final float targetY = button.isBigVideoAlignmentBottom() ?
-                buttonContainer.getHeight() - fullVideoHeight : 0;
+        final float targetY = 0;// button.isBigVideoAlignmentBottom() ?
+               // buttonContainer.getHeight() - fullVideoHeight : 0;
         ValueAnimator animator = new ValueAnimator();
         animator.setDuration(200);
         animator.setIntValues(animatedView.getWidth(), buttonContainer.getWidth() - videoPadding * 2);
@@ -266,7 +295,7 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
             }
         });
         animator.addListener(new BaseAnimatorListener() {
-            @Override
+            //@Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 buttonView.setMode(true);
@@ -282,48 +311,6 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
             }
         });
         animator.start();
-    }
-
-    /*private Dialog createPopup(final Context context, Popup popup) {
-        final Dialog dialog = new Dialog(context, R.style.FVMinisitesDialogTheme);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                onPopupDismissed();
-            }
-        });
-
-        int height = buttonContainer.getHeight() - Utils.dpToPx(context, popup.getTopMargin()) - Utils.dpToPx(context, popup.getBottomMargin());
-        int width = buttonContainer.getWidth() - Utils.dpToPx(context, popup.getStartMargin()) - Utils.dpToPx(context, popup.getEndMargin());
-        @SuppressLint("InflateParams")
-        FrameLayout fl = (FrameLayout) LayoutInflater.from(context).inflate(R.layout.fv_minisites_popup, null, false);
-        View popupContent = fl.findViewById(R.id.fv_minisites_poup_content);
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) popupContent.getLayoutParams();
-        layoutParams.setMargins(Utils.dpToPx(context, popup.getStartMargin()), Utils.dpToPx(context, popup.getTopMargin()),
-                Utils.dpToPx(context, popup.getEndMargin() - 18), Utils.dpToPx(context, popup.getBottomMargin() - 24));
-        popupContent.setLayoutParams(layoutParams);
-        Assets.loadPopupCloseImage((ImageView) fl.findViewById(R.id.fv_minisites_close_popup));
-        fl.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                dialog.dismiss();
-                return false;
-            }
-        });
-
-        Utils.configuredPoweredByView(fl.findViewById(R.id.fv_minisites_powered_by));
-        final WebView popupWebView = (WebView) fl.findViewById(R.id.fv_minisites_webview);
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) popupWebView.getLayoutParams();
-        lp.width = width;
-        lp.height = height;
-        popupWebView.setLayoutParams(lp);
-        dialog.setContentView(fl, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        final ProgressBar progressBar = (ProgressBar) fl.findViewById(R.id.fv_minisites_progress_bar);
-        Utils.configureWebView(popupWebView, progressBar);
-        //progressBar.loadData(Utils.readFully(context.getResources().openRawResource(R.raw.fv_minisites_progress)),"text/html", "utf-8");
-        popupWebView.loadUrl(popup.getContent());
-        dialog.setCanceledOnTouchOutside(true);
-        return dialog;
     }*/
 
     void removeCurrentButton(boolean animate) {
@@ -483,13 +470,13 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            Log.d("event", buttonView.getX() + "," + buttonView.getX() + " " + event.getRawX() + "," + event.getRawY() + " " + dx + "," + dy);
+            Log.d("event", (int) buttonView.getX() + "," + (int) buttonView.getY() + " " + (int) event.getRawX() + "," + (int) event.getRawY());
             int buttonWidth = buttonView.getWidth();
             int buttonHeight = buttonView.getHeight();
             int buttonContentWidth = buttonContentView.getWidth();
-            int buttonContentHeight = buttonContentView.getHeight();
-            int maxVideoWidth = buttonContainer.getWidth() - buttonView.getContext().getResources().getDimensionPixelSize(R.dimen.fv_minisites_video_padding) * 2;
-            int maxVideoHeight = (int) (maxVideoWidth * button.getAspectRatio());
+            //int buttonContentHeight = buttonContentView.getHeight();
+            //int maxVideoWidth = buttonContainer.getWidth() - buttonView.getContext().getResources().getDimensionPixelSize(R.dimen.fv_minisites_video_padding) * 2;
+            //int maxVideoHeight = (int) (maxVideoWidth * button.getAspectRatio());
 
             if (gestureDetector.onTouchEvent(event) && reactToClickGesture)
                 return true;
@@ -547,12 +534,16 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
                 case MotionEvent.ACTION_MOVE:
                     if (buttonView.canBeTrashed()) {
                         trashView.getHitRect(trashRect);
-                        if (!isNearTrash && trashRect.contains((int) (event.getRawX() - buttonContainer.getX()), (int) (event.getRawY() - buttonContainer.getY()))) {
+                        Rect buttonRect = new Rect((int) buttonView.getX(), (int) buttonView.getY(), (int) buttonView.getX() + buttonView.getWidth(), (int) buttonView.getY() + buttonView.getHeight());
+
+                        //if (!isNearTrash && trashRect.contains((int) (event.getRawX() - buttonContainer.getX()), (int) (event.getRawY() - buttonContainer.getY()))) {
+                        if (!isNearTrash && Rect.intersects(trashRect, buttonRect)) {
                             isNearTrash = true;
                             buttonView.setAlpha(buttonView.getButton().getOpacity());
                             if (vibrator != null)
                                 vibrator.vibrate(500);
-                        } else if (isNearTrash && !trashRect.contains((int) (event.getRawX() - buttonContainer.getX()), (int) (event.getRawY() - buttonContainer.getY()))) {
+                            //} else if (isNearTrash && !trashRect.contains((int) (event.getRawX() - buttonContainer.getX()), (int) (event.getRawY() - buttonContainer.getY()))) {
+                        } else if (isNearTrash && !Rect.intersects(trashRect, buttonRect)) {
                             isNearTrash = false;
                             buttonView.setAlpha(1);
                             if (vibrator != null)

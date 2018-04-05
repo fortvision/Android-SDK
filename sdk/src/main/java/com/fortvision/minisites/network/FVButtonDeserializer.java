@@ -17,7 +17,6 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.text.NumberFormat;
 
-import static com.fortvision.minisites.utils.Utils.getJsonElementAsBoolean;
 import static com.fortvision.minisites.utils.Utils.getJsonElementAsInt;
 import static com.fortvision.minisites.utils.Utils.getJsonElementAsString;
 
@@ -47,22 +46,18 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
             int opacityTimeout = object.get("opacity_timeout").getAsInt();
 
             String popupContent = object.get("popup_content").getAsString(); //"http://castro.co.il";
-            int popupWidth = getJsonElementAsInt(object.get("popup_original_width"), -1);
-            int popupHeight = getJsonElementAsInt(object.get("popup_original_height"), -1);
             boolean preloadPopup = object.get("preload_popup").getAsInt() == 1;
             int popupStartMargin = getJsonElementAsInt(object.get("popup_horizontal_margin"), 0);
             int popupEndMargin = getJsonElementAsInt(object.get("popup_horizontal_margin"), 0);
             int popupTopMargin = getJsonElementAsInt(object.get("popup_top_margin"), 0);
             int popupBottomMargin = getJsonElementAsInt(object.get("popup_bottom_margin"), 0);
 
-            Popup popup = new Popup(popupContent, preloadPopup, popupWidth, popupHeight,
-                    popupStartMargin, popupEndMargin, popupTopMargin, popupBottomMargin);
+            Popup popup = new Popup(popupContent, preloadPopup, popupStartMargin, popupEndMargin, popupTopMargin, popupBottomMargin);
             if (object.get("is_video_campaign").getAsInt() == 1) {
-                boolean bigVideoAlignmentBottom = getJsonElementAsInt(object.get("align_video_to_bottom"), 0) == 1;
                 int bigWidth = object.get("video_width").getAsInt();
                 int bigHeight = object.get("video_height").getAsInt();
                 return new VideoButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup,
-                        object.get("video_url").getAsString(), bigVideoAlignmentBottom, bigWidth, bigHeight);
+                        object.get("video_url").getAsString(), bigWidth, bigHeight);
             } else {
                 if (object.get("is_button_iframe").getAsInt() == 1) {
                     return new IframeButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup,
