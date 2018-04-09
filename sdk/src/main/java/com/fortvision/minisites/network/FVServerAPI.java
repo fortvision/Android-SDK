@@ -60,13 +60,13 @@ public interface FVServerAPI {
     @POST("popup_load/{campaignId}/{designId}")
     Call<ResponseBody> reportLoadPopup(@Path("campaignId") String campaignId, @Path("designId") String designId,
                                        @Header("UID") String userId, @Header("IP") String ip, @Header("user-agent") String userAgent,
-                                       @Field("loading_time") long loadingTime);
+                                       @Field("time") long loadingTime);
 
     @FormUrlEncoded
     @POST("popup_close/{campaignId}/{designId}")
     Call<ResponseBody> reportClosePopup(@Path("campaignId") String campaignId, @Path("designId") String designId,
                                         @Header("UID") String userId, @Header("IP") String ip, @Header("user-agent") String userAgent,
-                                        @Field("time_closed") long timeClosed);
+                                        @Field("time") long timeClosed);
 
     @GET("sdk_assets")
     Call<JsonObject> getImages();

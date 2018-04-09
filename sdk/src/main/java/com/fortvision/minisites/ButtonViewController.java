@@ -265,54 +265,6 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
         }
     }
 
-   /* private void showVideoFull(final FVButtonVideoView buttonView, final VideoButton button) {
-        Context context = buttonView.getContext();
-        buttonView.cancelDim();
-        handler.removeCallbacks(dismissVideoCompleted);
-        buttonView.hideClose();
-        final View animatedView = buttonView.getContentView();
-        final int initialContentHeight = animatedView.getHeight();
-        final ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) animatedView.getLayoutParams();
-        animatedView.setLayoutParams(lp);
-        final float startX = buttonView.getX();
-        final float startY = buttonView.getY();
-        int videoPadding = context.getResources().getDimensionPixelSize(R.dimen.fv_minisites_video_padding);
-        final int fullVideoHeight = (int) (button.getBigAspectRatio() * (buttonContainer.getWidth() - videoPadding * 2)) + videoPadding * 2;
-        final float targetY = 0;// button.isBigVideoAlignmentBottom() ?
-               // buttonContainer.getHeight() - fullVideoHeight : 0;
-        ValueAnimator animator = new ValueAnimator();
-        animator.setDuration(200);
-        animator.setIntValues(animatedView.getWidth(), buttonContainer.getWidth() - videoPadding * 2);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float animatedFraction = animation.getAnimatedFraction();
-                lp.width = (Integer) animation.getAnimatedValue();
-                lp.height = (int) (button.getBigAspectRatio() * lp.width);//(int) (animatedFraction * (fullVideoHeight - initialContentHeight)) + initialContentHeight;
-                animatedView.setLayoutParams(lp);
-                buttonView.setX(startX - startX * animatedFraction);
-                buttonView.setY(startY - (startY - targetY) * animatedFraction);
-            }
-        });
-        animator.addListener(new BaseAnimatorListener() {
-            //@Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                buttonView.setMode(true);
-                buttonView.setShowBanner(true);
-                Context context = buttonContainer.getContext();
-                buttonContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.fv_minisites_popup_bg));
-                buttonContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onMinimizeVideo(buttonView);
-                    }
-                });
-            }
-        });
-        animator.start();
-    }*/
-
     void removeCurrentButton(boolean animate) {
         if (buttonView == null || animateButtonOut != null)
             return;
