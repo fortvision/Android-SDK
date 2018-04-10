@@ -37,12 +37,11 @@ public class UserLocationUpdater extends BroadcastReceiver {
         try {
             if (intent.hasExtra(LocationManager.KEY_LOCATION_CHANGED)) {
                 Location location = intent.getParcelableExtra(LocationManager.KEY_LOCATION_CHANGED);
-                //Log.i("onLocationReceive", location.getLongitude() + " " + location.getLatitude());
                 reportUserLocation(context, location);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("FORTVISION", e.getMessage());
+            Log.e("FortVision", e.getMessage());
         }
     }
 
@@ -76,7 +75,7 @@ public class UserLocationUpdater extends BroadcastReceiver {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("FORTVISION", e.getMessage());
+            Log.e("FortVision", e.getMessage());
         }
     }
 

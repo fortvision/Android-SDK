@@ -51,7 +51,7 @@ public class PopupDialogFragment extends DialogFragment {
         Point size = new Point();
         display.getSize(size);
 
-        int height = size.y - 48 - Utils.dpToPx(context, popup.getTopMargin()) - Utils.dpToPx(context, popup.getBottomMargin());
+        int height = (int) (size.y * 0.93) - Utils.dpToPx(context, popup.getTopMargin()) - Utils.dpToPx(context, popup.getBottomMargin());
         int width = size.x - Utils.dpToPx(context, popup.getStartMargin()) - Utils.dpToPx(context, popup.getEndMargin());
 
         //int height = buttonContainer.getHeight() - Utils.dpToPx(context, popup.getTopMargin()) - Utils.dpToPx(context, popup.getBottomMargin());
