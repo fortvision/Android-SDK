@@ -163,7 +163,9 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
 
         if (lastButtonCall != null)
             lastButtonCall.cancel();
-        lastButtonCall = serverAPI.getButton(context.getPublisherId(), context.getUserId(), Utils.getDeviceIpAsStr(), context.getUserAgent());
+        lastButtonCall = serverAPI.getButton(context.getPublisherId(), context.getUserId(), "application/x-www-form-urlencoded; charset=UTF-8",
+                context.getUserAgent(), "{\"batteryLevel\":null,\"isCharging\":null}", "true", "https://www.fortvision.com/demo/?fv-c=143707",
+                1, 146874, 0);
         lastButtonCall.enqueue(new Callback<FVButton>() {
             @Override
             public void onResponse(@NonNull Call<FVButton> call, @NonNull Response<FVButton> response) {
