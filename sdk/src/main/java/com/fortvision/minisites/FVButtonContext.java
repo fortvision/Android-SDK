@@ -31,11 +31,10 @@ public class FVButtonContext {
     private String userAgent;
 
     public FVButtonContext(@NonNull Activity activity, @NonNull String publisherId, @Nullable String categoryId,
-                           @Nullable String internalId, @NonNull String userAgent) {
+                            @NonNull String userAgent) {
         this.activity = new WeakReference<>(activity);
         this.publisherId = publisherId;
         this.categoryId = categoryId;
-        this.internalId = internalId;
         this.userAgent = userAgent;
     }
 
@@ -52,11 +51,6 @@ public class FVButtonContext {
     @Nullable
     public String getCategoryId() {
         return categoryId;
-    }
-
-    @Nullable
-    public String getInternalId() {
-        return internalId;
     }
 
     public void setUserId(@NonNull String userId) {

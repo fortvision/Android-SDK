@@ -35,8 +35,7 @@ public class TestActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Editable publisherId = ((EditText) findViewById(R.id.publisherId)).getText();
                 Editable categoryId = ((EditText) findViewById(R.id.categoryId)).getText();
-                Editable internalId = ((EditText) findViewById(R.id.internalId)).getText();
-                showBuble(publisherId, categoryId, internalId);
+                showBuble(publisherId, categoryId);
             }
         });
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
@@ -50,16 +49,15 @@ public class TestActivity extends AppCompatActivity {
 
         Editable publisherId = ((EditText) findViewById(R.id.publisherId)).getText();
         Editable categoryId = ((EditText) findViewById(R.id.categoryId)).getText();
-        Editable internalId = ((EditText) findViewById(R.id.internalId)).getText();
         if (!TextUtils.isEmpty(publisherId))
-            showBuble(publisherId, categoryId, internalId);
+            showBuble(publisherId, categoryId);
     }
 
-    private void showBuble(Editable publisherId, Editable categoryId, Editable internalId) {
-        if (TextUtils.isEmpty(categoryId) && TextUtils.isEmpty(internalId))
+    private void showBuble(Editable publisherId, Editable categoryId) {
+        if (TextUtils.isEmpty(categoryId))
             MiniSites.trigger(this, publisherId.toString());
         else
-            MiniSites.trigger(this, publisherId.toString(), categoryId.toString(), internalId.toString());
+            MiniSites.trigger(this, publisherId.toString(), categoryId.toString());
     }
 
 }

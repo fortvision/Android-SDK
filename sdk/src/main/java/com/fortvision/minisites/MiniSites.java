@@ -82,25 +82,25 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
     }
 
     public static void trigger(@NonNull Activity activity, @NonNull String publisherId) {
-        trigger(activity, publisherId, null, null);
+        trigger(activity, publisherId, null);
     }
 
     public static void trigger(@NonNull Activity activity, @NonNull String publisherId,
-                               @Nullable String categoryId, @Nullable String internalId) {
+                               @Nullable String categoryId) {
         get().clearButtonImpl();
-        get().triggerInternal(activity, publisherId, categoryId, internalId);
+        get().triggerInternal(activity, publisherId, categoryId);
         UserLocationUpdater.start(activity);
     }
 
     private void triggerInternal(@NonNull Activity activity, @NonNull String publisherId,
-                                 @Nullable String categoryId, @Nullable String internalId) {
+                                 @Nullable String categoryId) {
         //Removed remote assets loading till further notice
         //Assets.verifyLoaded();
         getLocation(activity);
 
         if (cachedUserAgent == null)
             cachedUserAgent = Utils.getUserAgent(activity);
-        context = new FVButtonContext(activity, publisherId, categoryId, internalId, cachedUserAgent);
+        context = new FVButtonContext(activity, publisherId, categoryId, cachedUserAgent);
         if (cachedUserId == null) {
             if (getUserIdTask != null)
                 getUserIdTask.cancel(true);
