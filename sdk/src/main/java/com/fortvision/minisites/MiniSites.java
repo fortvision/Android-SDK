@@ -127,6 +127,8 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
             context.setUserId(cachedUserId);
             retrieveAndShowButton(context);
         }
+        Utils.setDisplayMetrics(context.getMetrics());
+
     }
 
     @SuppressWarnings({"MissingPermission"})

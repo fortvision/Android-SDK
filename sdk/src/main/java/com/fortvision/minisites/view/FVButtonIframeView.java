@@ -37,6 +37,11 @@ public class FVButtonIframeView extends FVButtonView {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.fv_minisites_iframe_content, this);
         webView = findViewById(R.id.fv_minisites_iframe_btn);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setDisplayZoomControls(true);
+        webView.getSettings().setLoadWithOverviewMode(false);
+        webView.getSettings().setUseWideViewPort(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         webView.setWebChromeClient(new WebChromeClient() {
@@ -59,11 +64,11 @@ public class FVButtonIframeView extends FVButtonView {
         if (button.getButtonType() != FVButtonType.IFRAME)
             return;
         IframeButton ib = (IframeButton) button;
+
         webView.loadUrl(ib.getButtonContentUrl());
         webView.refreshDrawableState();
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setUseWideViewPort(true);
+        //webView.setMaxWidth(webView.getMinimumWidth());
+        //webView.setMaxHeight(webView.getMinimumHeight());
     }
 
 }

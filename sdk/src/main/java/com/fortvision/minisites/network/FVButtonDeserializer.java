@@ -1,6 +1,9 @@
 package com.fortvision.minisites.network;
 
+import android.content.Context;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.fortvision.minisites.model.Anchor;
 import com.fortvision.minisites.model.FVButton;
@@ -8,6 +11,7 @@ import com.fortvision.minisites.model.IframeButton;
 import com.fortvision.minisites.model.ImageButton;
 import com.fortvision.minisites.model.Popup;
 import com.fortvision.minisites.model.VideoButton;
+import com.fortvision.minisites.utils.Utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -28,7 +32,6 @@ import static com.fortvision.minisites.utils.Utils.getJsonElementAsString;
 public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
     @Override
     public FVButton deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        //json = new JsonParser().parse("{\"campaign_id\":\"2277\",\"design_id\":7385,\"is_video_campaign\":0,\"preload_popup\":0,\"popup_content\":\"https://fortbuzz.com/new/35\",\"button_width\":80,\"button_height\":120,\"button_initial_side\":\"left\",\"allow_bubble_dismiss\":1,\"dismiss_size\":24,\"button_initial_vertical_position\":\"50%\",\"button_initial_horizontal_position\":\"1%\",\"open_new_tab\":0,\"opacity_timeout\":15,\"opacity_level\":0.2,\"popup_horizontal_margin\":30,\"popup_top_margin\":30,\"popup_bottom_margin\":30,\"twitch_button\":0,\"is_button_iframe\":0,\"button_imgC\":\"https://publicstatic.blob.core.windows.net/staticfiles/FB-Images/FuzeTeaV1.png\",\"button_imgR\":\"https://publicstatic.blob.core.windows.net/staticfiles/FB-Images/FuzeTeaV1.png\",\"button_imgL\":\"https://publicstatic.blob.core.windows.net/staticfiles/FB-Images/FuzeTeaV1.png\",\"button_z_index\":null}");
         Log.d("JSON", json.toString());
         try {
             JsonObject object = json.getAsJsonObject();
@@ -52,13 +55,19 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
             float opacity = element0.get("opacity_level").getAsFloat();
             int opacityTimeout = element0.get("opacity_timeout").getAsInt();
 
-            String popupContent = element0.get("popup_content").getAsString()+"?useFbWeb=0"; //"http://castro.co.il";
+            String popupContent = element0.get("popup_content").getAsString()+"?useFbWeb=0";
             boolean preloadPopup = element0.get("preload_popup").getAsInt() == 1;
 
-            int popupStartMargin = 0;//getJsonElementAsInt(object.get("popup_horizontal_margin"), 0);
-            int popupEndMargin = 0;//getJsonElementAsInt(object.get("popup_horizontal_margin"), 0);
-            int popupTopMargin = 0;//getJsonElementAsInt(object.get("popup_top_margin"), 0);
-            int popupBottomMargin = 0;//getJsonElementAsInt(object.get("popup_bottom_margin"), 0);
+            int heightPixels = Utils.displayMetrics.heightPixels;
+            int widthPixels = Utils.displayMetrics.widthPixels;
+
+            int popupStartHPix = (int) Math.round(heightPixels / 100.0 * ((100 - Integer.parseInt(element0.get("popup_height").getAsString().replace("%", "")))/2));
+            int popupStartWPix = (int) Math.round(widthPixels / 100.0 * ((100 - Integer.parseInt(element0.get("popup_width").getAsString().replace("%", "")))/4));
+
+            int popupStartMargin = popupStartWPix;//getJsonElementAsInt(object.get("popup_horizontal_margin"), 0);
+            int popupEndMargin = popupStartWPix;//getJsonElementAsInt(object.get("popup_horizontal_margin"), 0);
+            int popupTopMargin = popupStartHPix;//getJsonElementAsInt(object.get("popup_top_margin"), 0);
+            int popupBottomMargin = popupStartHPix;//getJsonElementAsInt(object.get("popup_bottom_margin"), 0);
 
             Popup popup = new Popup(popupContent, preloadPopup, popupStartMargin, popupEndMargin, popupTopMargin, popupBottomMargin);
             if (element0.get("is_video_campaign").getAsInt() == 1) {

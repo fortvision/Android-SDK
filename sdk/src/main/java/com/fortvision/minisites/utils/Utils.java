@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -39,6 +40,11 @@ import java.util.List;
 
 public class Utils {
 
+    public  static DisplayMetrics displayMetrics;
+
+    public static void setDisplayMetrics(DisplayMetrics displayMetrics1){
+        displayMetrics = displayMetrics1;
+    }
     /**
      * @param context the current context.
      * @return the default user agent for http connections.
@@ -132,9 +138,7 @@ public class Utils {
     public static void configureWebView(final WebView webView, final View progressView) {
         webView.setBackgroundColor(Color.TRANSPARENT);
         WebSettings settings = webView.getSettings();
-        settings.setBuiltInZoomControls(true);
         settings.setDisplayZoomControls(false);
-        webView.setInitialScale(1);
         settings.setLoadWithOverviewMode(false);
         settings.setUseWideViewPort(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
