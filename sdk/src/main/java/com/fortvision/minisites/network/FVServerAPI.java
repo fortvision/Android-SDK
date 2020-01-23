@@ -14,9 +14,13 @@ import retrofit2.http.Path;
 
 public interface FVServerAPI {
 
+    @FormUrlEncoded
     @POST("3/pageview/{publisherId}")
     Call<FVButton> getButton(@Path("publisherId") String publisherId, @Header("UID") String userId,
-                             @Header("IP") String ip, @Header("user-agent") String userAgent);
+                             @Header("Content-Type") String content, @Header("user-agent") String userAgent,
+                             @Header("battery") String battery, @Header("mobile") String mobile,
+                             @Header("originhref") String originhref,
+                             @Field("nl") Integer nl, @Field("c[]") Integer c, @Field("mwa") Integer mwa);
 
     @FormUrlEncoded
     @POST("user_loc")

@@ -82,25 +82,25 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
     }
 
     public static void trigger(@NonNull Activity activity, @NonNull String publisherId) {
-        trigger(activity, publisherId, null, null);
+        trigger(activity, publisherId, null);
     }
 
     public static void trigger(@NonNull Activity activity, @NonNull String publisherId,
-                               @Nullable String categoryId, @Nullable String internalId) {
+                               @Nullable String categoryId) {
         get().clearButtonImpl();
-        get().triggerInternal(activity, publisherId, categoryId, internalId);
+        get().triggerInternal(activity, publisherId, categoryId);
         UserLocationUpdater.start(activity);
     }
 
     private void triggerInternal(@NonNull Activity activity, @NonNull String publisherId,
-                                 @Nullable String categoryId, @Nullable String internalId) {
+                                 @Nullable String categoryId) {
         //Removed remote assets loading till further notice
         //Assets.verifyLoaded();
         getLocation(activity);
 
         if (cachedUserAgent == null)
             cachedUserAgent = Utils.getUserAgent(activity);
-        context = new FVButtonContext(activity, publisherId, categoryId, internalId, cachedUserAgent);
+        context = new FVButtonContext(activity, publisherId, categoryId, cachedUserAgent);
         if (cachedUserId == null) {
             if (getUserIdTask != null)
                 getUserIdTask.cancel(true);
@@ -127,6 +127,8 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
             context.setUserId(cachedUserId);
             retrieveAndShowButton(context);
         }
+        Utils.setDisplayMetrics(context.getMetrics());
+
     }
 
     @SuppressWarnings({"MissingPermission"})
@@ -163,7 +165,9 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
 
         if (lastButtonCall != null)
             lastButtonCall.cancel();
-        lastButtonCall = serverAPI.getButton(context.getPublisherId(), context.getUserId(), Utils.getDeviceIpAsStr(), context.getUserAgent());
+        lastButtonCall = serverAPI.getButton(context.getPublisherId(), context.getUserId(), "application/x-www-form-urlencoded; charset=UTF-8",
+                context.getUserAgent(), "{\"batteryLevel\":null,\"isCharging\":null}", "true", "https://www.fortvision.com/demo/?fv-c=143707",
+                1, Integer.parseInt(context.getCategoryId())/*146874*/, 0);
         lastButtonCall.enqueue(new Callback<FVButton>() {
             @Override
             public void onResponse(@NonNull Call<FVButton> call, @NonNull Response<FVButton> response) {

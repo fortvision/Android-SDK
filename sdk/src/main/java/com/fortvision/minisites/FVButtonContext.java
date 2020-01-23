@@ -3,6 +3,7 @@ package com.fortvision.minisites;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 
 import java.lang.ref.WeakReference;
 
@@ -22,20 +23,16 @@ public class FVButtonContext {
     private String categoryId;
 
     @Nullable
-    private String internalId;
-
-    @Nullable
     private String userId;
 
     @NonNull
     private String userAgent;
 
     public FVButtonContext(@NonNull Activity activity, @NonNull String publisherId, @Nullable String categoryId,
-                           @Nullable String internalId, @NonNull String userAgent) {
+                            @NonNull String userAgent) {
         this.activity = new WeakReference<>(activity);
         this.publisherId = publisherId;
         this.categoryId = categoryId;
-        this.internalId = internalId;
         this.userAgent = userAgent;
     }
 
@@ -54,11 +51,6 @@ public class FVButtonContext {
         return categoryId;
     }
 
-    @Nullable
-    public String getInternalId() {
-        return internalId;
-    }
-
     public void setUserId(@NonNull String userId) {
         this.userId = userId;
     }
@@ -75,6 +67,12 @@ public class FVButtonContext {
 
     public void destroy() {
         activity.clear();
+    }
+
+    public DisplayMetrics getMetrics(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        activity.get().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        return metrics;
     }
 
 }

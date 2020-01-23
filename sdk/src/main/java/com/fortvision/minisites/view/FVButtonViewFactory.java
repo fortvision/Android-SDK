@@ -33,7 +33,7 @@ public class FVButtonViewFactory {
                 buttonView = new FVButtonVideoView(activity);
                 break;
             default:
-                buttonView = null;
+                throw new RuntimeException("unreachable");
         }
         return buttonView;
     }
