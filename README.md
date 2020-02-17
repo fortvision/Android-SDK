@@ -14,6 +14,6 @@ implementation 'com.fortviosion.minisites'
 ```
 ## Using 
 
-'''
+```
 MiniSites.trigger(this, publisherId.toString(), categoryId.toString());
-'''
+```
