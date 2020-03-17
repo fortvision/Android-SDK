@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="fv_minisites_powered_by">powered by FORTVISION</string>
+    <string name="cognito_identity_pool_id">eu-west-1:ad0dcedc-e656-400b-8b9c-e266f23d1af9</string>
+    <string name="region">eu-west-1</string>
+    <string name="kinesis_stream_name_events">EventStatStream</string>
+    <string name="kinesis_stream_name_fv_chat">FortpagesChatResponsesStream</string>
+    <string name="kinesis_stream_name_impressions">ImpressionsStream</string>
+    <string name="kinesis_stream_name_PIC">PICStream</string>
+    <string name="kinesis_stream_name_PQPS">PQPSStream</string>
+    <string name="kinesis_stream_name_PageMeta">PageMeta</string>
+    <string name="kinesis_stream_name_PageMetaS">PageMetaStream</string>
 </resources>

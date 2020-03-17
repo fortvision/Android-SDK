@@ -1,26 +1,36 @@
 package com.fortvision.minisites;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.fortvision.minisites.model.Popup;
 import com.fortvision.minisites.utils.Assets;
 import com.fortvision.minisites.utils.Utils;
+
+import static java.lang.Math.round;
 
 public class PopupDialogFragment extends DialogFragment {
     static Context context;
@@ -43,6 +53,7 @@ public class PopupDialogFragment extends DialogFragment {
         buttonViewController.onPopupDismissed();
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Dialog dialog = new Dialog(context, R.style.FVMinisitesDialogTheme);
@@ -60,14 +71,14 @@ public class PopupDialogFragment extends DialogFragment {
         @SuppressLint("InflateParams")
         FrameLayout fl = (FrameLayout) LayoutInflater.from(context).inflate(R.layout.fv_minisites_popup, null, false);
 
-        View popupContent = fl.findViewById(R.id.fv_minisites_poup_content);
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) popupContent.getLayoutParams();
-        layoutParams.setMargins(
-                Utils.dpToPx(context, popup.getStartMargin()),
-                Utils.dpToPx(context, popup.getTopMargin()),
-                Utils.dpToPx(context, popup.getEndMargin() == 0 ? 0 : popup.getEndMargin() - 22),
-                Utils.dpToPx(context, popup.getBottomMargin() - 24)
-        );
+        final View popupContent = fl.findViewById(R.id.fv_minisites_poup_content);
+        final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) popupContent.getLayoutParams();
+        /*.setMargins(
+               Utils.dpToPx(context, popup.getStartMargin()),
+               Utils.dpToPx(context, popup.getTopMargin()),
+               Utils.dpToPx(context, popup.getEndMargin() == 0 ? 0 : popup.getEndMargin() - 22),
+               Utils.dpToPx(context, popup.getBottomMargin() - 24)
+        );*/
         popupContent.setLayoutParams(layoutParams);
 
         Assets.loadPopupCloseImage((ImageView) fl.findViewById(R.id.fv_minisites_close_popup));
@@ -80,21 +91,73 @@ public class PopupDialogFragment extends DialogFragment {
         });
         Utils.configuredPoweredByView(fl.findViewById(R.id.fv_minisites_powered_by));
         final WebView popupWebView = (WebView) fl.findViewById(R.id.fv_minisites_webview);
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) popupWebView.getLayoutParams();
-        lp.width = width;
-        lp.height = height;
+        final FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) popupWebView.getLayoutParams();
         popupWebView.setLayoutParams(lp);
 
         dialog.setContentView(fl, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         final ProgressBar progressBar = (ProgressBar) fl.findViewById(R.id.fv_minisites_progress_bar);
         Utils.configureWebView(popupWebView, progressBar);
-        popupWebView.loadUrl(popup.getContent());
+        popupWebView.getSettings().setJavaScriptEnabled(true);
+        popupWebView.getSettings().setLoadWithOverviewMode(true);
+        popupWebView.getSettings().setAllowContentAccess(true);
+        popupWebView.getSettings().setUseWideViewPort(true);
+
+
         popupWebView.setWebViewClient(new WebViewClient() {
             public void onPageFinished(WebView view, String url) {
                 buttonViewController.onLoadPopup();
             }
         });
+        popupWebView.addJavascriptInterface(new WebAppInterface(context,popupWebView, lp), "Android");
+        popupWebView.loadUrl(popup.getContent());
+
         dialog.setCanceledOnTouchOutside(true);
         return dialog;
+    }
+
+    @JavascriptInterface
+    public void resize(final float height) {
+        Handler mainHandler = new Handler(context.getMainLooper());
+
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                FrameLayout fl = (FrameLayout) LayoutInflater.from(context).inflate(R.layout.fv_minisites_popup, null, false);
+                fl.findViewById(R.id.fv_minisites_webview).setLayoutParams(new LinearLayout.LayoutParams(getResources().getDisplayMetrics().widthPixels, (int) (height * getResources().getDisplayMetrics().density)));
+            } // This is your code
+        };
+        mainHandler.post(myRunnable);
+
+
+
+    }
+}
+
+class WebAppInterface {
+    Context mContext;
+    WebView mWebView;
+    FrameLayout.LayoutParams layoutParams;
+
+    /** Instantiate the interface and set the context */
+    WebAppInterface(Context c, WebView v, FrameLayout.LayoutParams lp) {
+        mContext = c;
+        mWebView = v;
+        layoutParams = lp;
+    }
+
+    /** Show a toast from the web page */
+    @JavascriptInterface
+    public void showToast(final String width, final String height) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                float newWidth = Float.parseFloat(width) * mContext.getResources().getDisplayMetrics().density; //round(Float.parseFloat(width) * mContext.getResources().getDisplayMetrics().density);
+                float newHeight = Float.parseFloat(height) * mContext.getResources().getDisplayMetrics().density;//round(Float.parseFloat(height) * mContext.getResources().getDisplayMetrics().density);
+                layoutParams.width = round((newWidth <  mContext.getResources().getDisplayMetrics().widthPixels ? newWidth : mContext.getResources().getDisplayMetrics().widthPixels - round(mContext.getResources().getDisplayMetrics().widthPixels*0.10 )) ) ;
+                layoutParams.height = round((newHeight <  mContext.getResources().getDisplayMetrics().heightPixels ? newHeight : mContext.getResources().getDisplayMetrics().heightPixels - round(mContext.getResources().getDisplayMetrics().heightPixels*0.15 ))) ;
+                mWebView.setLayoutParams(layoutParams);
+                Toast.makeText(mContext, width + " " + height + " " + layoutParams.height, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

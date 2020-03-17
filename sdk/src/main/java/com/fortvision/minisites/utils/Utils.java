@@ -41,9 +41,11 @@ import java.util.List;
 public class Utils {
 
     public  static DisplayMetrics displayMetrics;
+    public static float density;
 
-    public static void setDisplayMetrics(DisplayMetrics displayMetrics1){
+    public static void setDisplayMetrics(DisplayMetrics displayMetrics1, float density1){
         displayMetrics = displayMetrics1;
+        density = density1;
     }
     /**
      * @param context the current context.

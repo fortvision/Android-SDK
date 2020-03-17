@@ -55,19 +55,23 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
             float opacity = element0.get("opacity_level").getAsFloat();
             int opacityTimeout = element0.get("opacity_timeout").getAsInt();
 
-            String popupContent = element0.get("popup_content").getAsString()+"?useFbWeb=0";
+            String popupContent = element0.get("popup_content").getAsString()/*"https://fortcdn.com/Campaigns-react/151304/66431470-3d58-11ea-8687-a325461d57b1"*/+"?useFbWeb=0";
             boolean preloadPopup = element0.get("preload_popup").getAsInt() == 1;
 
-            int heightPixels = Utils.displayMetrics.heightPixels;
-            int widthPixels = Utils.displayMetrics.widthPixels;
 
-            int popupStartHPix = (int) Math.round(heightPixels / 100.0 * ((100 - Integer.parseInt(element0.get("popup_height").getAsString().replace("%", "")))/2));
-            int popupStartWPix = (int) Math.round(widthPixels / 100.0 * ((100 - Integer.parseInt(element0.get("popup_width").getAsString().replace("%", "")))/4));
+
+            float heightPixels = Utils.displayMetrics.heightPixels / Utils.density;
+            float widthPixels = Utils.displayMetrics.widthPixels / Utils.density;
+
+
+
+            int popupStartHPix = (int) Math.round(heightPixels / 100.0 * ((100 - Integer.parseInt(element0.get("popup_height").getAsString().replace("%", ""))))/2);
+            int popupStartWPix = (int) Math.round(widthPixels / 100.0 * ((100 - Integer.parseInt(element0.get("popup_width").getAsString().replace("%", "")))/2));
 
             int popupStartMargin = popupStartWPix;//getJsonElementAsInt(object.get("popup_horizontal_margin"), 0);
             int popupEndMargin = popupStartWPix;//getJsonElementAsInt(object.get("popup_horizontal_margin"), 0);
             int popupTopMargin = popupStartHPix;//getJsonElementAsInt(object.get("popup_top_margin"), 0);
-            int popupBottomMargin = popupStartHPix;//getJsonElementAsInt(object.get("popup_bottom_margin"), 0);
+                    int popupBottomMargin = popupStartHPix;//getJsonElementAsInt(object.get("popup_bottom_margin"), 0);
 
             Popup popup = new Popup(popupContent, preloadPopup, popupStartMargin, popupEndMargin, popupTopMargin, popupBottomMargin);
             if (element0.get("is_video_campaign").getAsInt() == 1) {

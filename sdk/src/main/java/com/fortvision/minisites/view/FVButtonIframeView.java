@@ -1,5 +1,6 @@
 package com.fortvision.minisites.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.AttrRes;
@@ -8,9 +9,12 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.fortvision.minisites.R;
 import com.fortvision.minisites.model.FVButton;
@@ -33,6 +37,7 @@ public class FVButtonIframeView extends FVButtonView {
         this(context, attrs, 0);
     }
 
+    @SuppressLint("JavascriptInterface")
     public FVButtonIframeView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.fv_minisites_iframe_content, this);
@@ -49,6 +54,7 @@ public class FVButtonIframeView extends FVButtonView {
                 if (newProgress == 100 && listener != null)
                     listener.onFinishedLoadingData(FVButtonIframeView.this);
             }
+
 
         });
     }

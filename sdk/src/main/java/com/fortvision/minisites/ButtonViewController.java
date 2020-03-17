@@ -9,10 +9,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Rect;
+import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -26,6 +30,16 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.auth.AWSCognitoIdentityProvider;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSCredentialsProviderChain;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.internal.StaticCredentialsProvider;
+import com.amazonaws.mobileconnectors.kinesis.kinesisrecorder.KinesisFirehoseRecorder;
+import com.amazonaws.mobileconnectors.kinesis.kinesisrecorder.KinesisRecorder;
+import com.amazonaws.regions.Regions;
 import com.fortvision.minisites.model.Anchor;
 import com.fortvision.minisites.model.FVButton;
 import com.fortvision.minisites.network.BaseCallback;
@@ -39,6 +53,13 @@ import com.fortvision.minisites.view.FVButtonVideoView;
 import com.fortvision.minisites.view.FVButtonView;
 import com.fortvision.minisites.view.VideoEventsListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -47,6 +68,21 @@ import retrofit2.Call;
  */
 
 class ButtonViewController implements FVButtonActionListener, VideoEventsListener {
+
+    //Parameters configured in res/values/application_settings.xml
+    private String cognitoIdentityPoolId;
+    private Regions region;
+    private String kinesisStreamName;
+    private String firehoseStreamName;
+    private String androidId;
+
+    protected static final String APPLICATION_NAME = "android-mobile-streams";
+    protected static final double RAD2DEG = 180 / Math.PI;
+    protected KinesisRecorder kinesisRecorder;
+    protected KinesisFirehoseRecorder firehoseRecorder;
+    protected SensorManager sensorManager;
+    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ");
+
 
     @SuppressLint("StaticFieldLeak")
     private static ButtonViewController INSTANCE;
@@ -103,7 +139,7 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
         return INSTANCE;
     }
 
-    @SuppressLint("InflateParams")
+    @SuppressLint({"InflateParams", "StaticFieldLeak"})
     void startManageButton(@NonNull FVButtonContext fvContext, @NonNull final FVButtonView buttonView, @NonNull FVButton button) {
         buttonStatus = 0;
         this.fvContext = fvContext;
@@ -253,6 +289,8 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
             Call<ResponseBody> call = serverAPI.reportLoadPopup(button.getCampaignId(), String.valueOf(button.getDesignId()), MiniSites.INSTANCE.getCachedUserId(),
                     Utils.getDeviceIpAsStr(), MiniSites.INSTANCE.getCachedUserAgent(), getSecSinceStart());
             call.enqueue(new BaseCallback<ResponseBody>());
+
+            //HERE KINESIS
         }
     }
 
@@ -262,6 +300,8 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
             Call<ResponseBody> call = serverAPI.reportClosePopup(button.getCampaignId(), String.valueOf(button.getDesignId()), MiniSites.INSTANCE.getCachedUserId(),
                     Utils.getDeviceIpAsStr(), MiniSites.INSTANCE.getCachedUserAgent(), getSecSinceStart());
             call.enqueue(new BaseCallback<ResponseBody>());
+
+            //HERE KINESIS
         }
     }
 

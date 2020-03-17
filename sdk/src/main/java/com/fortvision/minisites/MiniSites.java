@@ -127,7 +127,7 @@ public class MiniSites implements FVButtonActionListener, VideoEventsListener {
             context.setUserId(cachedUserId);
             retrieveAndShowButton(context);
         }
-        Utils.setDisplayMetrics(context.getMetrics());
+        Utils.setDisplayMetrics(context.getMetrics(), context.getMetrics().density);
 
     }
 
