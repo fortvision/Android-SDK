@@ -1,6 +1,6 @@
 package com.fortvision.minisites.network;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import retrofit2.Call;
 import retrofit2.Callback;

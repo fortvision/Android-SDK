@@ -1,6 +1,6 @@
 package com.fortvision.minisites.model;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * An abstract base class for all FV button types.

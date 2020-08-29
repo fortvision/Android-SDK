@@ -1,8 +1,8 @@
 package com.fortvision.minisites.view;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.fortvision.minisites.FVButtonContext;
 import com.fortvision.minisites.model.FVButton;

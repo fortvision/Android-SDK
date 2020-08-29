@@ -1,6 +1,6 @@
 package com.fortvision.minisites.model;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * Represent Popup related data of an {@link FVButton}.

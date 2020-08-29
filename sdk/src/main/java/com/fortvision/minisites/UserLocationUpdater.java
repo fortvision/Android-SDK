@@ -5,19 +5,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.kinesis.kinesisrecorder.KinesisRecorder;
 import com.amazonaws.regions.Regions;
 import com.fortvision.minisites.network.BaseCallback;
@@ -25,19 +20,13 @@ import com.fortvision.minisites.network.FVServerAPI;
 import com.fortvision.minisites.network.FVServerApiFactory;
 import com.fortvision.minisites.utils.Utils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static com.fortvision.minisites.ButtonViewController.APPLICATION_NAME;
 
 /**
  * This class is responsible for register location request, receiving the user location from the

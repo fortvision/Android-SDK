@@ -3,7 +3,7 @@ package com.fortvision.minisites.utils;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.bumptech.glide.request.target.DrawableImageViewTarget;

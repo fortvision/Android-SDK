@@ -1,6 +1,6 @@
 package com.fortvision.minisites.model;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * A POJO representing a FortVision button that shows a specific url.
