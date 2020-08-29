@@ -5,9 +5,7 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <application
-
-        android:supportsRtl="true">
+    <application android:supportsRtl="true">
 
         <receiver android:name="com.fortvision.minisites.UserLocationUpdater" />
     </application>
