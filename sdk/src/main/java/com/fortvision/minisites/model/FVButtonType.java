@@ -5,7 +5,6 @@ package com.fortvision.minisites.model;
  */
 
 public enum FVButtonType {
-
     SIMPLE_IMAGE,
     IFRAME,
     VIDEO_WITH_CONTENT,

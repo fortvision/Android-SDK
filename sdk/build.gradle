@@ -15,10 +15,11 @@ uploadArchives {
     repositories {
         // deploy to local
         mavenDeployer {
-            repository (url: "file://${System.env.HOME}/.m2/repository/")
+            repository(url: "file://${System.env.HOME}/.m2/repository/")
             pom.groupId = libraryGroupId
             pom.artifactId = libraryBaseName
-            pom.version = libraryVersion //Normally I would append "-SNAPSHOT" but newer gradle/maven can't always find them
+            pom.version = libraryVersion
+            //Normally I would append "-SNAPSHOT" but newer gradle/maven can't always find them
             pom.packaging = 'aar'
             // uniqueVersion = false // don't put in a timestamp on the filename (other project will not be able to depend on it)
         }
@@ -69,6 +70,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.devbrackets.android:exomedia:3.1.0'
     implementation 'com.google.android.gms:play-services-ads:19.3.0'
+    compileOnly 'org.projectlombok:lombok:1.18.12'
 
     implementation 'com.github.bumptech.glide:glide:4.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -76,4 +78,5 @@ dependencies {
     implementation 'com.amazonaws:aws-android-sdk-kinesis:2.6.0'
     implementation 'com.amazonaws:aws-android-sdk-auth-core:2.6.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
 }

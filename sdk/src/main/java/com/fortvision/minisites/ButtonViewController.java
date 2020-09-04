@@ -188,9 +188,9 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
             buttonView.setX(buttonContainer.getWidth());
         else
             buttonView.setX(-buttonView.getWidth());
-        float anchorY = clampAnchorY(anchor.getyPos());
+        float anchorY = clampAnchorY(anchor.getYPos());
         buttonView.setY(anchorY * buttonContainer.getHeight());
-        animateButtonToAnchor(new Anchor(anchor.getxPos(), anchorY, anchor.isAlignedRight()));
+        animateButtonToAnchor(new Anchor(anchor.getXPos(), anchorY, anchor.isAlignedRight()));
         buttonView.startDimTimer();
         onButtonVisible(buttonView.getButton());
     }
@@ -199,10 +199,10 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
         buttonView.setCurrentAnchor(anchor);
         float targetX;
         if (anchor.isAlignedRight())
-            targetX = buttonContainer.getWidth() - anchor.getxPos() * buttonContainer.getWidth() - buttonView.getWidth();
+            targetX = buttonContainer.getWidth() - anchor.getXPos() * buttonContainer.getWidth() - buttonView.getWidth();
         else
-            targetX = anchor.getxPos() * buttonContainer.getWidth();
-        float targetY = anchor.getyPos() * buttonContainer.getHeight();
+            targetX = anchor.getXPos() * buttonContainer.getWidth();
+        float targetY = anchor.getYPos() * buttonContainer.getHeight();
         ObjectAnimator animatorX = ObjectAnimator.ofFloat(buttonView, View.X, targetX).setDuration(200);
         ObjectAnimator animatorY = ObjectAnimator.ofFloat(buttonView, View.Y, targetY).setDuration(200);
         AnimatorSet set = new AnimatorSet();
@@ -375,16 +375,20 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
         final int initialContentHeight = buttonView.getHeight();
         final float startX = buttonView.getX();
         final float startY = buttonView.getY();
-        final float targetY = buttonView.getCurrentAnchor().getyPos() * buttonContainer.getHeight()
+        final float targetY = buttonView.getCurrentAnchor().getYPos() * buttonContainer.getHeight()
                 + (button.isDismissible() ? Utils.dpToPx(context, button.getDismissSize())
                 + context.getResources().getDimensionPixelSize(R.dimen.fv_minisites_video_padding) : 0);
         final float targetX;
-        final int targetContentViewWidth = Utils.dpToPx(context, button.getWidth());
-        final int targetContentViewHeight = Utils.dpToPx(context, button.getHeight());
+        final int targetContentViewWidth = button.getWidth().isPx()
+                ? Utils.dpToPx(context, button.getWidth().toInt())
+                : button.getWidth().toInt() * Utils.getScreenWidth(context);
+        final int targetContentViewHeight = button.getHeight().isPx()
+                ? Utils.dpToPx(context, button.getHeight().toInt())
+                : button.getHeight().toInt() * Utils.getScreenHeight(context);
         if (buttonView.getCurrentAnchor().isAlignedRight())
-            targetX = buttonContainer.getWidth() - buttonView.getCurrentAnchor().getxPos() * buttonContainer.getWidth() - targetContentViewWidth - context.getResources().getDimensionPixelSize(R.dimen.fv_minisites_video_padding) * 2;
+            targetX = buttonContainer.getWidth() - buttonView.getCurrentAnchor().getXPos() * buttonContainer.getWidth() - targetContentViewWidth - context.getResources().getDimensionPixelSize(R.dimen.fv_minisites_video_padding) * 2;
         else
-            targetX = buttonView.getCurrentAnchor().getxPos() * buttonContainer.getWidth();
+            targetX = buttonView.getCurrentAnchor().getXPos() * buttonContainer.getWidth();
         final ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) animatedView.getLayoutParams();
         animatedView.setLayoutParams(lp);
         ValueAnimator animator = new ValueAnimator();
@@ -495,7 +499,7 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
                     buttonView.restoreClose();
                     buttonView.setAlpha(1);
                     buttonView.startDimTimer();
-                    float xPos = buttonView.getButton().getAnchor().getxPos();
+                    float xPos = buttonView.getButton().getAnchor().getXPos();
                     int containerHeight = buttonContainer.getHeight();
                     float yPos = clampAnchorY(buttonView.getY() / containerHeight);
                     boolean alignedRight = ((buttonView.getX() + buttonWidth / 2) / buttonContainer.getWidth()) > 0.5;

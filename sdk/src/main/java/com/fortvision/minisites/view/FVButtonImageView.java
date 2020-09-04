@@ -69,17 +69,17 @@ public class FVButtonImageView extends FVButtonView {
                 return false;
             }
         }).into(imageBtn);
-        if (ib.getLeftImageURL() != null)
-            Glide.with(context).load(ib.getLeftImageURL()).preload();
-        if (ib.getRightImageURL() != null)
-            Glide.with(context).load(ib.getRightImageURL()).preload();
+        if (ib.getImageLeftURL() != null)
+            Glide.with(context).load(ib.getImageLeftURL()).preload();
+        if (ib.getImageRightURL() != null)
+            Glide.with(context).load(ib.getImageRightURL()).preload();
     }
 
     @Override
     public void onButtonDragged(int dx, int dy) {
         super.onButtonDragged(dx, dy);
         ImageButton ib = (ImageButton) button;
-        Glide.with(getContext()).load(ib.getDefaultImageURL()).into(imageBtn);
+        Glide.with(getContext()).load(ib.getImageDragURL()).into(imageBtn);
     }
 
     @Override

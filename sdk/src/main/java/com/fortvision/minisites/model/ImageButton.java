@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
+import lombok.Getter;
+
 /**
  * A POJO representing a FortVision simple image button.
  */
-
+@Getter
 public class ImageButton extends FVButton {
 
     @Nullable
@@ -19,7 +21,7 @@ public class ImageButton extends FVButton {
     @NonNull
     private final String imageDragURL;
 
-    public ImageButton(boolean dismissible, int dismissSize, int width, int height, @NonNull Anchor anchor,
+    public ImageButton(boolean dismissible, int dismissSize, DimensionedSize width, DimensionedSize height, @NonNull Anchor anchor,
                        @NonNull String campaignId, int designId, float opacity, int opacityTimeout,
                        @NonNull Popup popup, @Nullable String imageLeftURL,
                        @Nullable String imageRightURL, @NonNull String imageDragURL) {
@@ -43,19 +45,5 @@ public class ImageButton extends FVButton {
             return imageLeftURL;
 
         return imageDragURL;
-    }
-
-    @NonNull
-    public String getDefaultImageURL() {
-        return imageDragURL;
-    }
-
-
-    public String getRightImageURL() {
-        return imageRightURL;
-    }
-
-    public String getLeftImageURL() {
-        return imageLeftURL;
     }
 }

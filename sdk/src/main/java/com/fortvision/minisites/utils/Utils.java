@@ -1,6 +1,7 @@
 package com.fortvision.minisites.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -86,6 +87,18 @@ public class Utils {
             }
         } catch (Exception e) {}
         return ip4Address != null ? ip4Address : ip6Address != null ? ip6Address : "";
+    }
+
+    public static int getScreenWidth(@NonNull Context context) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
+    }
+
+    public static int getScreenHeight(@NonNull Context context) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
     }
 
     public static int dpToPx(@NonNull Context context, int size) {

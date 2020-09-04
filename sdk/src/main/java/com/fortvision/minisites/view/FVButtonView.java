@@ -1,12 +1,16 @@
 package com.fortvision.minisites.view;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
+
 import androidx.annotation.AttrRes;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +96,8 @@ public abstract class FVButtonView extends FrameLayout {
         applyButtonDimensionToView(getContentView());
     }
 
+
+
     @FVButtonActionListener.DismissType
     public int getCloseDismissTypeEvent() {
         return FVButtonActionListener.DismissType.PRESSED_CLOSE;
@@ -113,12 +119,19 @@ public abstract class FVButtonView extends FrameLayout {
 
     public abstract View getContentView();
 
-
     private void applyButtonDimensionToView(View view) {
         Context context = getContext();
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.width = Utils.dpToPx(context, button.getWidth());
-        layoutParams.height = Utils.dpToPx(context, button.getHeight());
+        if (button.getWidth().isPx()) {
+            layoutParams.width = Utils.dpToPx(context, button.getWidth().toInt());
+        } else if (button.getWidth().isPercent()) {
+            layoutParams.width = Utils.getScreenWidth(context) * button.getWidth().toInt();
+        }
+        if (button.getWidth().isPx()) {
+            layoutParams.height = Utils.dpToPx(context, button.getHeight().toInt());
+        } else if (button.getWidth().isPercent()) {
+            layoutParams.height = Utils.getScreenWidth(context) * button.getHeight().toInt();
+        }
         view.setLayoutParams(layoutParams);
     }
 
