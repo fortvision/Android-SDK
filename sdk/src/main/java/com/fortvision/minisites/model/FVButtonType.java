@@ -8,5 +8,6 @@ public enum FVButtonType {
     SIMPLE_IMAGE,
     IFRAME,
     VIDEO_WITH_CONTENT,
-    VIDEO_WITHOUT_CONTENT;
+    VIDEO_WITHOUT_CONTENT,
+    AUTO_CLICK;
 }

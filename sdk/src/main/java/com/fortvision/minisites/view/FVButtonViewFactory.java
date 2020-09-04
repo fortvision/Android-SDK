@@ -22,6 +22,9 @@ public class FVButtonViewFactory {
 
         final FVButtonView buttonView;
         switch (button.getButtonType()) {
+            case AUTO_CLICK:
+                buttonView = new FVAutoClickButtonImageView(activity);
+                break;
             case SIMPLE_IMAGE:
                 buttonView = new FVButtonImageView(activity);
                 break;

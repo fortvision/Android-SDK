@@ -40,7 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="20208"
+            android:text="20295"
             />
 
         <EditText
@@ -48,7 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="146874"/>
+            android:text="186552"/>
     </LinearLayout>
 
     <Button

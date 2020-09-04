@@ -33,6 +33,7 @@ import com.amazonaws.mobileconnectors.kinesis.kinesisrecorder.KinesisRecorder;
 import com.amazonaws.regions.Regions;
 import com.fortvision.minisites.model.Anchor;
 import com.fortvision.minisites.model.FVButton;
+import com.fortvision.minisites.model.FVButtonType;
 import com.fortvision.minisites.network.BaseCallback;
 import com.fortvision.minisites.network.FVServerAPI;
 import com.fortvision.minisites.network.FVServerApiFactory;
@@ -166,6 +167,9 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
                 showButton();
             }
         });
+        if (button.getButtonType() == FVButtonType.AUTO_CLICK) {
+            this.onButtonClick(button);
+        }
         //if (buttonView.getButton().getPopup().isPreload())
         //    popupWebView.loadUrl(buttonView.getButton().getPopup().getContent());
     }

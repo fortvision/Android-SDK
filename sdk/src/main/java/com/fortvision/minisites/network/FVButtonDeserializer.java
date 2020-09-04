@@ -1,15 +1,13 @@
 package com.fortvision.minisites.network;
 
-import android.content.Context;
 import android.util.Log;
-import android.view.Display;
-import android.view.WindowManager;
 
 import com.fortvision.minisites.model.Anchor;
 import com.fortvision.minisites.model.DimensionedSize;
 import com.fortvision.minisites.model.FVButton;
 import com.fortvision.minisites.model.IframeButton;
 import com.fortvision.minisites.model.ImageButton;
+import com.fortvision.minisites.model.AutoClickButton;
 import com.fortvision.minisites.model.Popup;
 import com.fortvision.minisites.model.VideoButton;
 import com.fortvision.minisites.utils.Utils;
@@ -21,9 +19,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
-import java.text.NumberFormat;
 
-import static com.fortvision.minisites.utils.Utils.getJsonElementAsInt;
 import static com.fortvision.minisites.utils.Utils.getJsonElementAsString;
 
 /**
@@ -69,9 +65,22 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
             boolean dismissible = false;//object.get("allow_bubble_dismiss").getAsInt() == 1;
             int dismissSize = element0.get("dismiss_size").getAsInt();
 
-            NumberFormat percentFormat = NumberFormat.getPercentInstance();
-            Anchor anchor = new Anchor(percentFormat.parse(element0.get("button_initial_horizontal_position").getAsString()).floatValue(),
-                    percentFormat.parse(element0.get("button_initial_vertical_position").getAsString()).floatValue(),
+            DimensionedSize button_initial_horizontal_position = null;
+            if (element0.get("button_initial_horizontal_position").getAsString().endsWith("px")) {
+                button_initial_horizontal_position = getDimensionSize(element0.get("button_initial_horizontal_position").getAsString(), "px");
+            } else if (element0.get("popup_width").getAsString().endsWith("%")) {
+                button_initial_horizontal_position = getDimensionSize(element0.get("button_initial_horizontal_position").getAsString(), "%");
+            }
+
+            DimensionedSize button_initial_vertical_position = null;
+            if (element0.get("button_initial_vertical_position").getAsString().endsWith("px")) {
+                button_initial_vertical_position = getDimensionSize(element0.get("button_initial_vertical_position").getAsString(), "px");
+            } else if (element0.get("popup_width").getAsString().endsWith("%")) {
+                button_initial_vertical_position = getDimensionSize(element0.get("button_initial_vertical_position").getAsString(), "%");
+            }
+
+            Anchor anchor = new Anchor((float) button_initial_horizontal_position.getSize(),
+                    (float) button_initial_vertical_position.getSize(),
                     element0.get("button_initial_side").getAsString().equalsIgnoreCase("right")
             );
 
@@ -100,7 +109,7 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
             } else if (element0.get("popup_width").getAsString().endsWith("%")) {
                 popupStartWPix = getDimensionSize(element0.get("popup_width").getAsString(), "%");
             }
-            popupStartHPix.setSize(heightPixels * (100 - popupStartHPix.getSize()) / 200.0);
+            popupStartWPix.setSize(widthPixels * (100 - popupStartWPix.getSize()) / 200.0);
 
             int popupStartMargin = popupStartWPix.toInt();//getJsonElementAsInt(object.get("popup_horizontal_margin"), 0);
             int popupEndMargin = popupStartWPix.toInt();//getJsonElementAsInt(object.get("popup_horizontal_margin"), 0);
@@ -116,9 +125,11 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
             } else if (element0.get("is_button_iframe").getAsInt() == 1) {
                 return new IframeButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup,
                         element0.get("button_iframe_url").getAsString() + "?useFbWeb=0");
-            } else {
+            } else if(object.get("button_imgL") != null) {
                 return new ImageButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup,
                         getJsonElementAsString(object.get("button_imgL"), null), getJsonElementAsString(object.get("button_imgR"), null), object.get("button_imgC").getAsString());
+            } else {
+                return new AutoClickButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup);
             }
         } catch (Exception e) {
             throw new JsonParseException("Could not parse the json object", e);
