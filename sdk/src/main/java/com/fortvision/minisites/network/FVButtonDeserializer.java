@@ -79,8 +79,8 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
                 button_initial_vertical_position = getDimensionSize(element0.get("button_initial_vertical_position").getAsString(), "%");
             }
 
-            Anchor anchor = new Anchor((float) button_initial_horizontal_position.getSize(),
-                    (float) button_initial_vertical_position.getSize(),
+            Anchor anchor = new Anchor(button_initial_horizontal_position,
+                    button_initial_vertical_position,
                     element0.get("button_initial_side").getAsString().equalsIgnoreCase("right")
             );
 
@@ -116,7 +116,20 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
             int popupTopMargin = popupStartHPix.toInt();//getJsonElementAsInt(object.get("popup_top_margin"), 0);
             int popupBottomMargin = popupStartHPix.toInt();//getJsonElementAsInt(object.get("popup_bottom_margin"), 0);
 
-            Popup popup = new Popup(popupContent, preloadPopup, popupStartMargin, popupEndMargin, popupTopMargin, popupBottomMargin);
+            DimensionedSize popup_width;
+            DimensionedSize popup_height;
+            if (element0.get("popup_width").getAsString().endsWith("%")) {
+                popup_width = getDimensionSize(element0.get("popup_width").getAsString(), "%");
+            } else {
+                popup_width = getDimensionSize(element0.get("popup_width").getAsString(), "px");
+            }
+            if (element0.get("popup_height").getAsString().endsWith("%")) {
+                popup_height = getDimensionSize(element0.get("popup_height").getAsString(), "%");
+            } else {
+                popup_height = getDimensionSize(element0.get("popup_height").getAsString(), "px");
+            }
+
+            Popup popup = new Popup(popupContent, preloadPopup, popupStartMargin, popupEndMargin, popupTopMargin, popupBottomMargin, popup_width.isPercent(), popup_width.getSize(), popup_height.getSize());
             if (element0.get("is_video_campaign").getAsInt() == 1) {
                 int bigWidth = object.get("video_width").getAsInt();
                 int bigHeight = object.get("video_height").getAsInt();
@@ -125,7 +138,7 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
             } else if (element0.get("is_button_iframe").getAsInt() == 1) {
                 return new IframeButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup,
                         element0.get("button_iframe_url").getAsString() + "?useFbWeb=0");
-            } else if(object.get("button_imgL") != null) {
+            } else if (object.get("button_imgL") != null) {
                 return new ImageButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup,
                         getJsonElementAsString(object.get("button_imgL"), null), getJsonElementAsString(object.get("button_imgR"), null), object.get("button_imgC").getAsString());
             } else {

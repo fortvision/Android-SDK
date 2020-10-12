@@ -125,12 +125,12 @@ public abstract class FVButtonView extends FrameLayout {
         if (button.getWidth().isPx()) {
             layoutParams.width = Utils.dpToPx(context, button.getWidth().toInt());
         } else if (button.getWidth().isPercent()) {
-            layoutParams.width = Utils.getScreenWidth(context) * button.getWidth().toInt();
+            layoutParams.width = (int) Utils.getScreenWidth(context) * button.getWidth().toInt();
         }
         if (button.getWidth().isPx()) {
             layoutParams.height = Utils.dpToPx(context, button.getHeight().toInt());
         } else if (button.getWidth().isPercent()) {
-            layoutParams.height = Utils.getScreenWidth(context) * button.getHeight().toInt();
+            layoutParams.height = (int) Utils.getScreenWidth(context) * button.getHeight().toInt();
         }
         view.setLayoutParams(layoutParams);
     }

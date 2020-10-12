@@ -23,6 +23,6 @@ public class DimensionedSize {
     }
 
     public boolean isPercent() {
-        return dimension.equals("px");
+        return dimension.equals("%");
     }
 }

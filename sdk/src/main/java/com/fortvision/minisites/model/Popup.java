@@ -11,7 +11,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Popup {
-
     /**
      * the url of the content
      */
@@ -43,11 +42,17 @@ public class Popup {
      */
     private final int bottomMargin;
 
-    /**
-     * Construct a new {@code Popup}
-     * see {@link Popup#Popup(String, boolean, int, int, int, int)}
-     */
+    private final boolean includeSize;
+
+    private final double width;
+
+    private final double height;
+
     public Popup(@Nullable String content, boolean preload/*, int width, int height*/) {
-        this(content, preload, 0, 0, 0, 0);
+        this(content, preload, 0, 0, 0, 0, false, 0, 0);
+    }
+
+    public Popup(@Nullable String content, boolean preload, double width, double height) {
+        this(content, preload, 0, 0, 0, 0, true, width, height);
     }
 }

@@ -89,13 +89,13 @@ public class Utils {
         return ip4Address != null ? ip4Address : ip6Address != null ? ip6Address : "";
     }
 
-    public static int getScreenWidth(@NonNull Context context) {
+    public static double getScreenWidth(@NonNull Context context) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.widthPixels;
     }
 
-    public static int getScreenHeight(@NonNull Context context) {
+    public static double getScreenHeight(@NonNull Context context) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.heightPixels;

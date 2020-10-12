@@ -13,12 +13,12 @@ public class Anchor {
     /**
      * The position in percentage on the X axes
      */
-    private final float xPos;
+    private final DimensionedSize xPos;
 
     /**
      * The position in percentage on the Y axes
      */
-    private final float yPos;
+    private final DimensionedSize yPos;
 
     private final boolean alignedRight;
 }

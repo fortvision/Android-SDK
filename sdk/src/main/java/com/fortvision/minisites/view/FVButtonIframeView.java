@@ -64,14 +64,10 @@ public class FVButtonIframeView extends FVButtonView {
     @Override
     public void accept(@NonNull final FVButton button) {
         super.accept(button);
-        if (button.getButtonType() != FVButtonType.IFRAME)
-            return;
         IframeButton ib = (IframeButton) button;
 
         webView.loadUrl(ib.getButtonContentUrl());
         webView.refreshDrawableState();
-        //webView.setMaxWidth(webView.getMinimumWidth());
-        //webView.setMaxHeight(webView.getMinimumHeight());
     }
 
 }

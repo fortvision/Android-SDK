@@ -1,6 +1,9 @@
 package com.fortvision.minisites.model;
 
+import android.webkit.WebView;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
