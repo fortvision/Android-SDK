@@ -174,9 +174,6 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
         if (button.getButtonType() == FVButtonType.AUTO_CLICK) {
             this.onButtonClick(button);
         }
-        if (button.getButtonType() == FVButtonType.IFRAME) {
-//            buttonContainer.setLayoutParams(new FrameLayout.LayoutParams(720, 360));
-        }
 //        if (button.getPopup().isPreload()) {
 //            popupWebView.loadUrl(buttonView.getButton().getPopup().getContent());
     }
@@ -195,12 +192,13 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
 
         buttonView.setVisibility(View.VISIBLE);
         Anchor anchor = buttonView.getButton().getAnchor();
-        if (anchor.isAlignedRight())
-            buttonView.setX(buttonContainer.getWidth());
-        else
-            buttonView.setX(-buttonView.getWidth());
+        double targetX = anchor.isAlignedRight()
+                ? buttonContainer.getWidth() - anchor.getXPos().getSize() * Utils.getScreenWidth(buttonView.getContext())
+                : anchor.getXPos().getSize() * Utils.getScreenWidth(buttonView.getContext()) - buttonView.getWidth();
+        double targetY = anchor.getYPos().getSize() * Utils.getScreenHeight(buttonView.getContext());
+        buttonView.setX((float) targetX);
         DimensionedSize anchorY = new DimensionedSize(clampAnchorY(anchor.getYPos().toInt()), anchor.getXPos().getDimension());
-        buttonView.setY(anchorY.toInt() * buttonContainer.getHeight());
+        buttonView.setY((float) targetY);
         animateButtonToAnchor(new Anchor(anchor.getXPos(), anchorY, anchor.isAlignedRight()));
         buttonView.startDimTimer();
         onButtonVisible(buttonView.getButton());
@@ -208,29 +206,12 @@ class ButtonViewController implements FVButtonActionListener, VideoEventsListene
 
     private void animateButtonToAnchor(final Anchor anchor) {
         buttonView.setCurrentAnchor(anchor);
-        double screenWidthPercent = anchor.getXPos().isPercent()
-                ? Utils.getScreenWidth(buttonView.getContext()) / 100
-                : 1;
-        double screenHeightPercent = anchor.getYPos().isPercent()
-                ? Utils.getScreenHeight(buttonView.getContext()) / 100
-                : 1;
-        double targetX;
-        if (buttonView.getButton().getButtonType() == FVButtonType.IFRAME) {
-            targetX = screenWidthPercent;
-        } else {
-            if (anchor.isAlignedRight())
-                targetX = buttonContainer.getWidth() - anchor.getXPos().getSize() * buttonContainer.getWidth() - buttonView.getWidth();
-            else
-                targetX = anchor.getXPos().getSize() * buttonContainer.getWidth();
-        }
-        double targetY;
-        if (buttonView.getButton().getButtonType() == FVButtonType.IFRAME) {
-            targetY = screenHeightPercent;
-        } else {
-            targetY = anchor.getYPos().getSize() * buttonContainer.getHeight();
-        }
-        ObjectAnimator animatorX = ObjectAnimator.ofFloat(buttonView, View.X, (float) targetX).setDuration(200);
-        ObjectAnimator animatorY = ObjectAnimator.ofFloat(buttonView, View.Y, (float) targetY).setDuration(200);
+        double targetX = anchor.isAlignedRight()
+                ? buttonContainer.getWidth() - anchor.getXPos().getSize() * Utils.getScreenWidth(buttonView.getContext()) - buttonView.getWidth()
+                : anchor.getXPos().getSize() * Utils.getScreenWidth(buttonView.getContext());
+        double targetY = anchor.getYPos().getSize() * Utils.getScreenHeight(buttonView.getContext());
+        ObjectAnimator animatorX = ObjectAnimator.ofFloat(buttonView, View.X, (float) targetX).setDuration(400);
+        ObjectAnimator animatorY = ObjectAnimator.ofFloat(buttonView, View.Y, (float) targetY).setDuration(400);
         AnimatorSet set = new AnimatorSet();
         set.playTogether(animatorX, animatorY);
         set.start();

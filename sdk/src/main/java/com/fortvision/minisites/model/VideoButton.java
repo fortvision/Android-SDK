@@ -23,8 +23,8 @@ public class VideoButton extends FVButton {
 
     public VideoButton(boolean dismissible, int dismissSize, DimensionedSize width, DimensionedSize height, @NonNull Anchor anchor,
                        @NonNull String campaignId, int designId, float opacity, int opacityTimeout,
-                       @NonNull Popup popup, @NonNull String videoURL, int bigWidth, int bigHeight) {
-        super(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup);
+                       @NonNull Popup popup, @NonNull String videoURL, int bigWidth, int bigHeight, String dismissSide) {
+        super(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, dismissSide, popup);
         this.videoURL = videoURL;
         hasContent = !TextUtils.isEmpty(getPopup().getContent());
         bigAspectRatio = (float) bigHeight / bigWidth;

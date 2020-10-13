@@ -32,6 +32,8 @@ public abstract class FVButton {
 
     private final int opacityTimeout;
 
+    private final String dismissSide;
+
     @NonNull
     private final Popup popup;
 

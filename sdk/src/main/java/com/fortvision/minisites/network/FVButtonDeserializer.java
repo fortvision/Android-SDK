@@ -48,6 +48,8 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
             JsonArray campaignsData = object.get("campaignsData").getAsJsonArray();
             JsonObject element0 = campaignsData.get(0).getAsJsonObject();
 
+            String dismissSide = element0.get("dismiss_side").getAsString();
+
             DimensionedSize width = null;
             if (element0.get("button_width").getAsString().endsWith("px")) {
                 width = getDimensionSize(element0.get("button_width").getAsString(), "px");
@@ -134,13 +136,13 @@ public class FVButtonDeserializer implements JsonDeserializer<FVButton> {
                 int bigWidth = object.get("video_width").getAsInt();
                 int bigHeight = object.get("video_height").getAsInt();
                 return new VideoButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup,
-                        object.get("video_url").getAsString(), bigWidth, bigHeight);
+                        object.get("video_url").getAsString(), bigWidth, bigHeight, dismissSide);
             } else if (element0.get("is_button_iframe").getAsInt() == 1) {
                 return new IframeButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup,
-                        element0.get("button_iframe_url").getAsString() + "?useFbWeb=0");
+                        element0.get("button_iframe_url").getAsString() + "?useFbWeb=0", dismissSide);
             } else if (object.get("button_imgL") != null) {
                 return new ImageButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup,
-                        getJsonElementAsString(object.get("button_imgL"), null), getJsonElementAsString(object.get("button_imgR"), null), object.get("button_imgC").getAsString());
+                        getJsonElementAsString(object.get("button_imgL"), null), getJsonElementAsString(object.get("button_imgR"), null), object.get("button_imgC").getAsString(), dismissSide);
             } else {
                 return new AutoClickButton(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup);
             }

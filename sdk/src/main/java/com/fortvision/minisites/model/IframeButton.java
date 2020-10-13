@@ -15,8 +15,8 @@ public class IframeButton extends FVButton {
 
     public IframeButton(boolean dismissible, int dismissSize, DimensionedSize width, DimensionedSize height, @NonNull Anchor anchor,
                         @NonNull String campaignId, int designId, float opacity, int opacityTimeout,
-                        @NonNull Popup popup, @NonNull String buttonContentUrl) {
-        super(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup);
+                        @NonNull Popup popup, @NonNull String buttonContentUrl, String dismissSide) {
+        super(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, dismissSide, popup);
         this.buttonContentUrl = buttonContentUrl;
     }
 

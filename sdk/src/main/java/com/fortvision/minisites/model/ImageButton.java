@@ -24,8 +24,8 @@ public class ImageButton extends FVButton {
     public ImageButton(boolean dismissible, int dismissSize, DimensionedSize width, DimensionedSize height, @NonNull Anchor anchor,
                        @NonNull String campaignId, int designId, float opacity, int opacityTimeout,
                        @NonNull Popup popup, @Nullable String imageLeftURL,
-                       @Nullable String imageRightURL, @NonNull String imageDragURL) {
-        super(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, popup);
+                       @Nullable String imageRightURL, @NonNull String imageDragURL, String dismissSide) {
+        super(dismissible, dismissSize, width, height, anchor, campaignId, designId, opacity, opacityTimeout, dismissSide, popup);
         this.imageLeftURL = imageLeftURL;
         this.imageRightURL = imageRightURL;
         this.imageDragURL = imageDragURL;
